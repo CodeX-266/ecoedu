@@ -1,10 +1,12 @@
-/** @type {import('tailwindcss').Config} */
+// tailwind.config.js
 module.exports = {
-  content: [
-    "./src/**/*.{js,jsx,ts,tsx}", // make sure your Navbar file is inside src
-  ],
+  content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        decorative: ["'Cinzel Decorative'", "serif"],
+      },
+    },
   },
   plugins: [],
 };

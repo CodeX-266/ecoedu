@@ -12,6 +12,7 @@
   "dependencies": {
     "@fontsource/bebas-neue": "^5.2.6",
     "@fontsource/cinzel-decorative": "^5.2.7",
+    "firebase": "^12.2.1",
     "framer-motion": "^12.23.13",
     "lottie-react": "^2.4.1",
     "react": "^19.1.1",
