@@ -1,5 +1,5 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar"; // Updated Navbar with logo
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import Navbar from "./components/Navbar";
 import Landing from "./pages/Landing";
 import Dashboard from "./pages/Student/StudentDashboard";
 import TeacherDashboard from "./pages/Teacher/TeacherDashboard";
@@ -7,6 +7,22 @@ import Quiz from "./pages/Quiz";
 import Leaderboard from "./pages/Leaderboard";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+
+// Private Route wrapper for role-based access
+const PrivateRoute = ({ children, role }) => {
+  const isLoggedIn = localStorage.getItem("isLoggedIn");
+  const userRole = localStorage.getItem("role");
+
+  if (!isLoggedIn) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (role && userRole !== role) {
+    return <Navigate to="/" replace />;
+  }
+
+  return children;
+};
 
 function App() {
   return (
@@ -23,9 +39,11 @@ function App() {
         <Route
           path="/dashboard"
           element={
-            <div className="pt-20 min-h-screen">
-              <Dashboard />
-            </div>
+            <PrivateRoute role="student">
+              <div className="pt-20 min-h-screen">
+                <Dashboard />
+              </div>
+            </PrivateRoute>
           }
         />
 
@@ -33,9 +51,11 @@ function App() {
         <Route
           path="/teacher-dashboard"
           element={
-            <div className="pt-20 min-h-screen">
-              <TeacherDashboard />
-            </div>
+            <PrivateRoute role="teacher">
+              <div className="pt-20 min-h-screen">
+                <TeacherDashboard />
+              </div>
+            </PrivateRoute>
           }
         />
 
@@ -43,9 +63,11 @@ function App() {
         <Route
           path="/quiz"
           element={
-            <div className="pt-20 min-h-screen">
-              <Quiz />
-            </div>
+            <PrivateRoute>
+              <div className="pt-20 min-h-screen">
+                <Quiz />
+              </div>
+            </PrivateRoute>
           }
         />
 
@@ -53,9 +75,11 @@ function App() {
         <Route
           path="/leaderboard"
           element={
-            <div className="pt-20 min-h-screen">
-              <Leaderboard />
-            </div>
+            <PrivateRoute>
+              <div className="pt-20 min-h-screen">
+                <Leaderboard />
+              </div>
+            </PrivateRoute>
           }
         />
 
