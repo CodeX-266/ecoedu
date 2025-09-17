@@ -1,11 +1,20 @@
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Landing from "./pages/Landing";
+import Dashboard from "./pages/Dashboard";
+import Quiz from "./pages/Quiz";
+import Leaderboard from "./pages/Leaderboard";
+
 function App() {
   return (
-    <div className="flex items-center justify-center h-screen bg-green-100">
-      <h1 className="text-4xl font-bold text-green-700">
-        🌍 EcoEdu 
-      </h1>
-    </div>
-  )
+    <Router>
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/quiz" element={<Quiz />} />
+        <Route path="/leaderboard" element={<Leaderboard />} />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;
