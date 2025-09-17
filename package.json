@@ -10,9 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fontsource/bebas-neue": "^5.2.6",
+    "@fontsource/cinzel-decorative": "^5.2.7",
+    "framer-motion": "^12.23.13",
+    "lottie-react": "^2.4.1",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "react-router-dom": "^7.9.1"
+    "react-router-dom": "^7.9.1",
+    "react-tsparticles": "^2.12.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
