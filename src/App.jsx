@@ -9,6 +9,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import StudentQuiz from "./pages/Student/StudentQuiz";
 import Courses from "./pages/Courses"; // 👈 1. Import the Courses component
+import Profile from "./pages/Profile";
 
 // Private Route wrapper for role-based access
 const PrivateRoute = ({ children, role }) => {
@@ -124,6 +125,19 @@ function App() {
             </div>
           }
         />
+
+        {/* Profile Page */}
+        <Route
+          path="/profile"
+          element={
+            <PrivateRoute>
+              <div className="pt-20 min-h-screen">
+                <Profile />
+              </div>
+            </PrivateRoute>
+          }
+        />
+
 
         {/* 404 Fallback */}
         <Route
