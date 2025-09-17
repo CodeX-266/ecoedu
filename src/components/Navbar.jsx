@@ -31,6 +31,23 @@ function Navbar() {
             <span className="absolute left-0 -bottom-1 w-0 h-1 bg-green-300 group-hover:w-full transition-all duration-300 rounded"></span>
           </Link>
         ))}
+
+        {/* Login & Register */}
+        <Link
+          to="/login"
+          className="relative group font-medium hover:text-blue-300 transition"
+        >
+          Login
+          <span className="absolute left-0 -bottom-1 w-0 h-1 bg-blue-300 group-hover:w-full transition-all duration-300 rounded"></span>
+        </Link>
+
+        <Link
+          to="/register"
+          className="relative group font-medium hover:text-blue-300 transition"
+        >
+          Register
+          <span className="absolute left-0 -bottom-1 w-0 h-1 bg-blue-300 group-hover:w-full transition-all duration-300 rounded"></span>
+        </Link>
       </div>
     </nav>
   );
