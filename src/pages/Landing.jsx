@@ -1,12 +1,17 @@
 import { motion } from "framer-motion";
 import Particles from "react-tsparticles";
-import bgImage from "../assets/background.jpg"; // your dark full-screen background
-import "@fontsource/cinzel-decorative"; // ✨ mystical font
+import { loadFull } from "tsparticles"; 
+import bgImage from "../assets/background.jpg";
+import "@fontsource/cinzel-decorative";
 
 export default function Landing() {
+  const particlesInit = async (main) => {
+    await loadFull(main);
+  };
+
   return (
     <div
-      className="relative flex items-center justify-center h-screen w-screen overflow-hidden"
+      className="relative flex flex-col items-center justify-center h-screen w-screen overflow-hidden"
       style={{
         backgroundImage: `url(${bgImage})`,
         backgroundSize: "cover",
@@ -14,78 +19,74 @@ export default function Landing() {
         minHeight: "100vh",
       }}
     >
-      {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-green-800 via-green-500 to-green-300 opacity-30 z-0"></div>
-
       {/* Particle Background */}
       <Particles
-        className="absolute inset-0 z-0"
+        id="tsparticles"
+        init={particlesInit}
+        className="absolute inset-0 z-10"
         options={{
           fpsLimit: 60,
+          background: { color: "transparent" },
           particles: {
-            number: { value: 70 },
-            size: { value: 3 },
-            color: { value: "#D1FAE5" },
-            move: { speed: 1, outModes: { default: "bounce" } },
-            opacity: { value: 0.6, random: true },
+            number: { value: 100, density: { enable: true, area: 800 } },
+            size: { value: 5, random: { enable: true, minimumValue: 3 } },
+            color: { value: "#ffffff" },
+            move: { enable: true, speed: 1.5, outModes: { default: "bounce" } },
+            opacity: { value: 1, random: true },
             shape: { type: "circle" },
           },
           interactivity: {
             events: { onHover: { enable: true, mode: "repulse" } },
+            modes: { repulse: { distance: 120 } },
           },
         }}
       />
 
       {/* Floating Shapes */}
       <motion.div
-        className="absolute w-24 h-24 bg-white rounded-full opacity-20 top-20 left-10 z-0"
+        className="absolute w-24 h-24 bg-white rounded-full opacity-40 z-10"
         animate={{ y: [0, 20, 0], x: [0, 15, 0], rotate: [0, 15, 0] }}
         transition={{ duration: 6, repeat: Infinity, repeatType: "mirror" }}
       />
       <motion.div
-        className="absolute w-32 h-32 bg-white rounded-full opacity-15 bottom-32 right-20 z-0"
+        className="absolute w-32 h-32 bg-white rounded-full opacity-35 z-10"
         animate={{ y: [0, -25, 0], x: [0, -15, 0], rotate: [0, -20, 0] }}
         transition={{ duration: 8, repeat: Infinity, repeatType: "mirror" }}
       />
 
       {/* Hero Content */}
-      <div className="relative z-20 text-center px-4">
-        {/* Title */}
+      <div className="relative z-20 text-center px-4 flex flex-col items-center justify-center h-full max-w-full">
         <motion.h1
           style={{
             color: "white",
-            textShadow: "0 0 12px rgba(255,255,255,0.6)", // ✨ softer glow
-            fontFamily: "'Cinzel Decorative', serif", // mystical font
+            textShadow: "0 0 15px rgba(255,255,255,0.7)",
+            fontFamily: "'Cinzel Decorative', serif",
+            fontSize: "12vw",
+            lineHeight: 1,
           }}
-          className="text-[12rem] md:text-[16rem] lg:text-[20rem] font-extrabold leading-none"
-          initial={{ y: 400, opacity: 0 }}
+          initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 1.5, ease: "easeOut" }}
         >
           InTutor
         </motion.h1>
 
-        {/* Subtitle */}
         <motion.p
-          className="mt-6 text-3xl md:text-5xl text-white opacity-90 font-semibold"
-          initial={{ y: 50, opacity: 0 }}
+          className="mt-6 text-2xl md:text-4xl text-white opacity-90 font-semibold"
+          initial={{ y: 30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 1, delay: 0.8, ease: "easeOut" }}
         >
           Gamified Environmental Learning
         </motion.p>
 
-        {/* Button */}
         <motion.a
           href="/dashboard"
-          className="mt-10 inline-block px-14 py-6 bg-white text-green-700 font-bold rounded-xl shadow-2xl hover:bg-green-100 hover:scale-105 transition-all"
-          initial={{ y: 50, opacity: 0 }}
+          className="mt-8 inline-block px-10 py-4 bg-white text-green-700 font-bold rounded-lg shadow-lg hover:bg-green-100 transition-all"
+          initial={{ y: 30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 1, delay: 1.5, ease: "easeOut" }}
-          whileHover={{
-            scale: 1.1,
-            boxShadow: "0 0 35px rgba(255,255,255,0.9)",
-          }}
+          whileHover={{ scale: 1.05, boxShadow: "0 0 25px rgba(255,255,255,0.9)" }}
         >
           Enter Dashboard
         </motion.a>
