@@ -28,7 +28,7 @@ function Register() {
       setLoading(true);
       console.log("Registering user:", { email, role, empID });
 
-      // Teacher validation
+      // Teacher validation (updated)
       if (role === "teacher") {
         if (!empID) {
           toast.error("Please enter Employee ID");
@@ -39,27 +39,22 @@ function Register() {
         const teacherRef = doc(db, "teachers", empID);
         const teacherSnap = await getDoc(teacherRef);
 
-        if (!teacherSnap.exists()) {
-          console.log("Teacher ID not found:", empID);
-          toast.error("Invalid employee ID!");
-          setLoading(false);
-          return;
+        if (teacherSnap.exists()) {
+          const teacherData = teacherSnap.data();
+          if (teacherData.registered) {
+            toast.error("This teacher is already registered!");
+            setLoading(false);
+            return;
+          }
         }
-
-        const teacherData = teacherSnap.data();
-        if (teacherData.registered) {
-          console.log("Teacher already registered:", empID);
-          toast.error("This teacher is already registered!");
-          setLoading(false);
-          return;
-        }
+        // If teacherSnap does NOT exist, we allow registration and will create the doc below
       }
 
       // Create user in Firebase Auth
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       console.log("User created in Auth:", userCredential.user.uid);
 
-      // Wait until user is fully authenticated
+      // Wait for auth state to fully propagate
       await new Promise((resolve) => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
           if (user) {
@@ -79,7 +74,7 @@ function Register() {
       });
       console.log("User added to Firestore:", userRef.id);
 
-      // Mark teacher as registered
+      // Mark teacher as registered (creates doc if it didn't exist)
       if (role === "teacher") {
         const teacherRef = doc(db, "teachers", empID);
         await setDoc(teacherRef, { registered: true }, { merge: true });
@@ -94,9 +89,7 @@ function Register() {
       setTimeout(() => navigate("/login"), 2200);
     } catch (err) {
       console.error("Error during registration:", err);
-      toast.error(err.message || "Registration failed!", {
-        style: { zIndex: 9999 },
-      });
+      toast.error(err.message || "Registration failed!", { style: { zIndex: 9999 } });
     } finally {
       setLoading(false);
     }
@@ -109,11 +102,7 @@ function Register() {
         reverseOrder={false}
         toastOptions={{
           duration: 3000,
-          style: {
-            background: "#333",
-            color: "#fff",
-            zIndex: 9999,
-          },
+          style: { background: "#333", color: "#fff", zIndex: 9999 },
         }}
       />
       <form
