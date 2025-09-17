@@ -18,16 +18,16 @@ function Login() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-black via-gray-900 to-cyan-600">
       <form
         onSubmit={handleLogin}
-        className="flex flex-col gap-4 p-8 bg-[#171717] rounded-3xl shadow-lg transform transition-transform duration-400 hover:scale-105"
+        className="flex flex-col gap-4 p-8 bg-gray-200 rounded-3xl shadow-lg transform transition-transform duration-400 hover:scale-105"
       >
-        <h2 className="text-center text-white text-xl mb-4">Login</h2>
+        <h2 className="text-center text-gray-800 text-xl mb-4">Login</h2>
 
         <input
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="px-4 py-2 rounded-full bg-[#171717] text-gray-300 shadow-inner outline-none"
+          className="px-4 py-2 rounded-full bg-white text-gray-800 shadow-inner outline-none"
           required
         />
 
@@ -36,14 +36,14 @@ function Login() {
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="px-4 py-2 rounded-full bg-[#171717] text-gray-300 shadow-inner outline-none"
+          className="px-4 py-2 rounded-full bg-white text-gray-800 shadow-inner outline-none"
           required
         />
 
         <select
           value={role}
           onChange={(e) => setRole(e.target.value)}
-          className="px-4 py-2 rounded-full bg-[#171717] text-gray-300 shadow-inner outline-none"
+          className="px-4 py-2 rounded-full bg-white text-gray-800 shadow-inner outline-none"
         >
           <option value="student">Student</option>
           <option value="teacher">Teacher</option>
@@ -52,16 +52,9 @@ function Login() {
         <div className="flex justify-center gap-4 mt-6">
           <button
             type="submit"
-            className="px-6 py-2 bg-gray-800 text-white rounded-md transition hover:bg-black"
+            className="px-6 py-2 bg-gray-600 text-white rounded-md transition hover:bg-gray-700"
           >
             Login
-          </button>
-          <button
-            type="button"
-            onClick={() => navigate("/register")}
-            className="px-6 py-2 bg-gray-800 text-white rounded-md transition hover:bg-black"
-          >
-            Register
           </button>
         </div>
       </form>

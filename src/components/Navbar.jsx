@@ -1,9 +1,18 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import logo from "../assets/logo.png"; // Ensure correct path
 
 function Navbar() {
+  const location = useLocation();
+
+  // Check if the current path is '/login' or '/register'
+  const isLoginPage = location.pathname === "/login" || location.pathname === "/register";
+
+  const navClass = isLoginPage 
+    ? "bg-gradient-to-br from-black via-gray-900 to-cyan-600 backdrop-blur-md" 
+    : "bg-transparent backdrop-blur-md";
+
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 py-4 bg-transparent text-white backdrop-blur-md">
+    <nav className={`fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 py-4 text-white ${navClass}`}>
       {/* Logo Section */}
       <Link
         to="/"
