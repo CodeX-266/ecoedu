@@ -8,7 +8,7 @@ import Leaderboard from "./pages/Leaderboard";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import StudentQuiz from "./pages/Student/StudentQuiz";
-
+import Courses from "./pages/Courses"; // 👈 1. Import the Courses component
 
 // Private Route wrapper for role-based access
 const PrivateRoute = ({ children, role }) => {
@@ -61,6 +61,18 @@ function App() {
           }
         />
 
+        {/* 👇 2. Add the new route for the Courses page */}
+        <Route
+          path="/courses"
+          element={
+            <PrivateRoute>
+              <div className="pt-20 min-h-screen">
+                <Courses />
+              </div>
+            </PrivateRoute>
+          }
+        />
+
         {/* Quiz */}
         <Route
           path="/quiz"
@@ -105,13 +117,13 @@ function App() {
           }
         />
         <Route
-        path="/student-quiz"
-        element={
-          <div className="pt-20 min-h-screen">
-            <StudentQuiz />
-          </div>
-        }
-      />
+          path="/student-quiz"
+          element={
+            <div className="pt-20 min-h-screen">
+              <StudentQuiz />
+            </div>
+          }
+        />
 
         {/* 404 Fallback */}
         <Route

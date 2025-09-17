@@ -1,10 +1,13 @@
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import Particles from "react-tsparticles";
-import { loadFull } from "tsparticles"; 
+import { loadFull } from "tsparticles";
 import bgImage from "../assets/background.jpg";
 import "@fontsource/cinzel-decorative";
 
 export default function Landing() {
+  const navigate = useNavigate();
+
   const particlesInit = async (main) => {
     await loadFull(main);
   };
@@ -80,16 +83,16 @@ export default function Landing() {
           Gamified Environmental Learning
         </motion.p>
 
-        <motion.a
-          href="/dashboard"
+        <motion.button
+          onClick={() => navigate("/courses")}
           className="mt-8 inline-block px-10 py-4 bg-white text-green-700 font-bold rounded-lg shadow-lg hover:bg-green-100 transition-all"
           initial={{ y: 30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 1, delay: 1.5, ease: "easeOut" }}
           whileHover={{ scale: 1.05, boxShadow: "0 0 25px rgba(255,255,255,0.9)" }}
         >
-          Enter Dashboard
-        </motion.a>
+          Enter Courses
+        </motion.button>
       </div>
     </div>
   );

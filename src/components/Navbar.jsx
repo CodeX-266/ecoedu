@@ -10,10 +10,9 @@ import logo from "../assets/logo.png";
 function Navbar() {
   const location = useLocation();
 
-  const [user, setUser] = useState(null); // null = not logged in
+  const [user, setUser] = useState(null);
   const [open, setOpen] = useState(false);
 
-  // ✅ Listen for auth changes and fetch Firestore user data
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
@@ -23,7 +22,7 @@ function Navbar() {
           if (snap.exists()) {
             setUser({
               uid: firebaseUser.uid,
-              ...snap.data(), // contains name, email, role, empID
+              ...snap.data(),
             });
           }
         } catch (err) {
@@ -37,7 +36,6 @@ function Navbar() {
     return () => unsubscribe();
   }, []);
 
-  // Logout handler
   const handleLogout = async () => {
     try {
       await signOut(auth);
@@ -48,12 +46,18 @@ function Navbar() {
     }
   };
 
+  // --- EDITED SECTION START ---
   const isLoginPage =
     location.pathname === "/login" || location.pathname === "/register";
+  const isCoursesPage = location.pathname === "/courses"; // 1. Check for courses page
 
-  const navClass = isLoginPage
-    ? "bg-gradient-to-br from-black via-gray-900 to-cyan-600 backdrop-blur-md"
-    : "bg-transparent backdrop-blur-md";
+  // 2. Updated logic to handle three different background styles
+  const navClass = isCoursesPage
+    ? "bg-gray-900/90 backdrop-blur-md" // Style for Courses page
+    : isLoginPage
+    ? "bg-gradient-to-br from-black via-gray-900 to-cyan-600 backdrop-blur-md" // Style for Login/Register
+    : "bg-transparent backdrop-blur-md"; // Default style for all other pages
+  // --- EDITED SECTION END ---
 
   return (
     <nav
@@ -83,7 +87,7 @@ function Navbar() {
 
       {/* Navigation Links */}
       <div className="hidden md:flex space-x-10 items-center text-white text-lg font-medium">
-        {/* ✅ Dashboard → role-based */}
+        {/* Dashboard link for logged-in users */}
         {user && (
           <Link
             to={user.role === "teacher" ? "/teacher-dashboard" : "/dashboard"}
@@ -93,6 +97,18 @@ function Navbar() {
             <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-green-300 group-hover:w-full transition-all duration-300 rounded"></span>
           </Link>
         )}
+        
+        {/* --- ADDED COURSES LINK --- */}
+        {user && (
+          <Link
+            to="/courses"
+            className="relative group hover:text-green-300 transition-colors duration-300"
+          >
+            Courses
+            <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-green-300 group-hover:w-full transition-all duration-300 rounded"></span>
+          </Link>
+        )}
+        {/* --- END ADDED LINK --- */}
 
         {/* Always available */}
         <Link
@@ -111,7 +127,7 @@ function Navbar() {
           <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-green-300 group-hover:w-full transition-all duration-300 rounded"></span>
         </Link>
 
-        {/* ✅ If user logged in → show profile dropdown */}
+        {/* User profile dropdown or login/register links */}
         {user ? (
           <div className="relative">
             <button
