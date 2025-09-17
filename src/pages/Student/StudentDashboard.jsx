@@ -1,17 +1,41 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { auth, db } from "../../firebase";   // ✅ fixed path
+import { onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+
 
 function StudentDashboard() {
-  // Mock static data
+  const [user, setUser] = useState(null);
+  const [animatedProgress, setAnimatedProgress] = useState(0);
+
+  // Mock progress & activity (replace later with real data if needed)
   const studentData = {
-    name: "Arjun",
     progress: 45,
     activities: [
       { date: "2025-09-17", description: "Completed Lesson 1" },
-      { date: "2025-09-16", description: "Attempted Quiz on Topic A" }
-    ]
+      { date: "2025-09-16", description: "Attempted Quiz on Topic A" },
+    ],
   };
 
-  const [animatedProgress, setAnimatedProgress] = useState(0);
+  // Fetch logged-in user data
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      if (firebaseUser) {
+        try {
+          const userRef = doc(db, "users", firebaseUser.uid);
+          const snap = await getDoc(userRef);
+          if (snap.exists()) {
+            setUser(snap.data()); // contains name, role, email, etc.
+          }
+        } catch (err) {
+          console.error("Error fetching user:", err);
+        }
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   // Animate progress bar filling
   useEffect(() => {
@@ -23,31 +47,35 @@ function StudentDashboard() {
       } else {
         clearInterval(interval);
       }
-    }, 15); // Smooth fill
+    }, 15);
     return () => clearInterval(interval);
   }, [studentData.progress]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-cyan-900 to-black text-white">
-      
       {/* Navbar */}
-      <nav className="fixed top-0 left-0 w-full bg-cyan-900/90 backdrop-blur-sm p-4 flex justify-between items-center z-50 shadow-md transition-all duration-500">
-        <h1 className="text-2xl font-bold tracking-wide text-white animate-gradient">InTutor</h1>
-        <div className="space-x-4">
-          <button className="px-4 py-2 bg-cyan-700 hover:bg-cyan-600 rounded-md shadow-sm transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
-            Dashboard
-          </button>
-          <button className="px-4 py-2 bg-purple-700 hover:bg-purple-600 rounded-md shadow-sm transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
+      <nav className="fixed top-0 left-0 w-full bg-cyan-900/90 backdrop-blur-sm p-4 flex justify-between items-center z-50 shadow-md">
+        <Link
+          to="/"
+          className="text-2xl font-bold tracking-wide text-white animate-gradient hover:scale-105 transition-transform"
+        >
+          InTutor
+        </Link>
+        <div>
+          <Link
+            to="/profile"
+            className="px-4 py-2 bg-purple-700 hover:bg-purple-600 rounded-md shadow-md transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105"
+          >
             Profile
-          </button>
+          </Link>
         </div>
       </nav>
 
       <div className="p-6 pt-28 max-w-5xl mx-auto">
         {/* Welcome Section with centered animated name */}
         <header className="mb-8 text-center">
-          <h2 className="text-5xl font-extrabold mb-2 tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-500 to-indigo-400 animate-nameFade scale-100">
-            {studentData.name}
+          <h2 className="text-5xl font-extrabold mb-2 tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-500 to-indigo-400 animate-nameFade">
+            {user?.name || "Student"}
           </h2>
           <p className="text-cyan-200 tracking-wide text-lg animate-nameFade delay-200">
             Your mystical learning journey awaits...
@@ -132,4 +160,3 @@ function StudentDashboard() {
 }
 
 export default StudentDashboard;
-

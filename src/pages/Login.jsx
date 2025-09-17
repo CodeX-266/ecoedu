@@ -1,3 +1,4 @@
+// src/components/Login.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "../firebase";
@@ -43,8 +44,8 @@ function Login() {
       localStorage.setItem("role", role);
       localStorage.setItem("email", email);
 
-      // Redirect based on role
-      navigate(role === "teacher" ? "/teacher-dashboard" : "/dashboard");
+      // ✅ Always go to home after login
+      navigate("/");
     } catch (err) {
       setError(err.message);
     }
@@ -109,7 +110,10 @@ function Login() {
 
         <p className="text-center text-gray-700 mt-4 text-sm">
           Don't have an account?{" "}
-          <span className="text-cyan-600 font-semibold hover:underline cursor-pointer">
+          <span
+            className="text-cyan-600 font-semibold hover:underline cursor-pointer"
+            onClick={() => navigate("/register")}
+          >
             Register
           </span>
         </p>

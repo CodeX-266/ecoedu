@@ -8,6 +8,7 @@ import toast, { Toaster } from "react-hot-toast";
 
 function Register() {
   const [role, setRole] = useState("student");
+  const [name, setName] = useState(""); // ✅ Added Name
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -26,9 +27,8 @@ function Register() {
 
     try {
       setLoading(true);
-      console.log("Registering user:", { email, role, empID });
 
-      // Teacher validation (updated)
+      // Teacher validation
       if (role === "teacher") {
         if (!empID) {
           toast.error("Please enter Employee ID");
@@ -47,12 +47,10 @@ function Register() {
             return;
           }
         }
-        // If teacherSnap does NOT exist, we allow registration and will create the doc below
       }
 
       // Create user in Firebase Auth
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      console.log("User created in Auth:", userCredential.user.uid);
 
       // Wait for auth state to fully propagate
       await new Promise((resolve) => {
@@ -64,21 +62,20 @@ function Register() {
         });
       });
 
-      // Add user to Firestore
+      // Add user to Firestore ✅ Now includes "name"
       const userRef = doc(db, "users", userCredential.user.uid);
       await setDoc(userRef, {
+        name, // ✅ Save name
         email,
         role,
         empID: role === "teacher" ? empID : null,
         createdAt: new Date(),
       });
-      console.log("User added to Firestore:", userRef.id);
 
-      // Mark teacher as registered (creates doc if it didn't exist)
+      // Mark teacher as registered
       if (role === "teacher") {
         const teacherRef = doc(db, "teachers", empID);
         await setDoc(teacherRef, { registered: true }, { merge: true });
-        console.log("Teacher marked as registered:", empID);
       }
 
       toast.success("Registration successful!", {
@@ -86,7 +83,7 @@ function Register() {
         style: { zIndex: 9999 },
       });
 
-      setTimeout(() => navigate("/login"), 2200);
+      setTimeout(() => navigate("/"), 2200);
     } catch (err) {
       console.error("Error during registration:", err);
       toast.error(err.message || "Registration failed!", { style: { zIndex: 9999 } });
@@ -112,6 +109,16 @@ function Register() {
         <h2 className="text-center text-gray-900 text-2xl font-bold mb-4 drop-shadow-md">
           Register
         </h2>
+
+        {/* ✅ Name Field */}
+        <input
+          type="text"
+          placeholder="Full Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="px-5 py-3 rounded-full bg-gray-100 text-gray-900 shadow-inner outline-none placeholder-gray-500 focus:ring-2 focus:ring-cyan-400 transition"
+          required
+        />
 
         <input
           type="email"
