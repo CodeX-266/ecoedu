@@ -7,6 +7,8 @@ import Quiz from "./pages/Quiz";
 import Leaderboard from "./pages/Leaderboard";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import StudentQuiz from "./pages/Student/StudentQuiz";
+
 
 function App() {
   return (
@@ -78,6 +80,14 @@ function App() {
             </div>
           }
         />
+        <Route
+        path="/student-quiz"
+        element={
+          <div className="pt-20 min-h-screen">
+            <StudentQuiz />
+          </div>
+        }
+      />
 
         {/* 404 Fallback */}
         <Route
